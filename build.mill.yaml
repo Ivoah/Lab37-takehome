@@ -1,0 +1,8 @@
+extends: ScalaModule
+scalaVersion: 3.9.0
+mvnDeps:
+- org.rogach::scallop::5.2.0
+- net.ivoah::vial:0.12.2
+- net.ivoah::squall:0.0.2
+- com.lihaoyi::scalatags:0.13.1
+- org.playframework::play-json:3.0.6
