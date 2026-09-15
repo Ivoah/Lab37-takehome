@@ -1,8 +1,11 @@
 extends: ScalaModule
 scalaVersion: 3.9.0
+scalacOptions: [-deprecation, -feature, -Werror, -language:implicitConversions, -Wunused:imports]
 mvnDeps:
 - org.rogach::scallop::5.2.0
 - net.ivoah::vial:0.12.2
-- net.ivoah::squall:0.0.2
+- net.ivoah::squall:0.0.3
 - com.lihaoyi::scalatags:0.13.1
 - org.playframework::play-json:3.0.6
+- org.xerial:sqlite-jdbc:3.50.3.0
+- org.apache.commons:commons-csv:1.14.1
