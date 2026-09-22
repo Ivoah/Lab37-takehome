@@ -12,8 +12,7 @@ set of notional test data exemplifying different possible order sources and scen
 * Create a minimal frontend / backend system that merges and tracks food orders.
 * Support both real time and scheduled orders.
 * Provide views to show orders by status and any other relevant metadata.
-* Provide a view of each order and a history of any changes or events that are relevant to
-* that order.
+* Provide a view of each order and a history of any changes or events that are relevant to that order.
 * Skeleton a payload for orders that are dispatched to the robot.
 
 ### Architectural Requirements:

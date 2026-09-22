@@ -1,74 +1,92 @@
 /*------------------------------------------------------------------------------
-    General
+  General
 ------------------------------------------------------------------------------*/
 *, *:before, *:after {
   box-sizing: border-box;
 }
 
 body {
-    max-width: 750px;
-    margin: 8px auto;
-    text-align: center;
-    font-family: sans-serif;
+  max-width: 750px;
+  margin: 8px auto;
+  text-align: center;
+  font-family: sans-serif;
+  overflow: scroll;
 }
 
 /*------------------------------------------------------------------------------
-    Tables
+  Tables
 ------------------------------------------------------------------------------*/
 table, th, td {
-    border: 1px solid black;
+  border: 1px solid black;
 }
 
 table {
-    margin: 16px auto;
+  margin: 16px auto;
 }
 
 th, td {
-    padding: 10px;
+  padding: 10px;
 }
 
 td > a {
-    display: inline-block;
-    line-height: 1.2
+  display: inline-block;
+  line-height: 1.2
 }
 
 /*------------------------------------------------------------------------------
-    Content
+  Content
 ------------------------------------------------------------------------------*/
 .markdown {
-    text-align: justify;
-    text-indent: 2em;
+  text-align: justify;
+  text-indent: 2em;
 }
 
 blockquote {
-    /*background: #f9f9f9;*/
-    color: #555;
-    border-left: .25em solid #ccc;
-    margin: 10px 0;
-    padding: 0 1em;
+  /*background: #f9f9f9;*/
+  color: #555;
+  border-left: .25em solid #ccc;
+  margin: 10px 0;
+  padding: 0 1em;
+}
+
+.wrap {
+  word-break: break-all;
 }
 
 /*------------------------------------------------------------------------------
-    Links
+  Links
 ------------------------------------------------------------------------------*/
 a {
-    color: inherit;
-    transition: filter 100ms;
-    white-space: nowrap;
+  color: inherit;
+  transition: filter 100ms;
 }
 
 a:hover {
-    filter: drop-shadow(0px 0px 1.5px black);
+  filter: drop-shadow(0px 0px 1.5px black);
 }
 
-.lnav {
-    position: absolute;
-    left: 5px;
-    top: 0px;
+textarea {
+  width: 100%;
 }
 
-.rnav {
-    position: absolute;
-    right: 5px;
-    top: 0px;
+.tabbar {
+  margin: 15px 0 35px 0;
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  text-transform: none;
+}
+
+.tab {
+  flex: 1 1 0px;
+  > a {
+    text-decoration: none;
+    border-bottom: 0 solid;
+    transition: filter 100ms, border-bottom 200ms;
+  }
+}
+
+.underline, .tab > a:hover {
+  border-bottom: 2px solid;
 }

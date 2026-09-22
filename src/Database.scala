@@ -16,8 +16,8 @@ object Database {
 
   def saveOrder(order: Order): String = {
     sql"""
-      insert into "order" (id, updated, firstName, lastName, items, notes, meta)
-      values (${order.id}, ${order.updated}, ${order.firstName}, ${order.lastName}, ${order.items}, ${order.notes}, ${Json.stringify(Json.toJson(order.meta))})
+      insert into "order" (id, updated, firstName, lastName, items, notes, scheduled, meta)
+      values (${order.id}, ${order.updated}, ${order.firstName}, ${order.lastName}, ${order.items}, ${order.notes}, ${order.scheduled}, ${Json.stringify(Json.toJson(order.meta))})
       returning id
     """.query(_.getString("id")).head
   }
