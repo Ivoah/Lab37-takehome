@@ -2,15 +2,18 @@ import scalatags.Text.all.*
 import scalatags.Text.tags2.title
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
+import play.api.libs.json.*
 
 object Templates {
-  private val dateTimeFormatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT)
+  private val dateTimeFormatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)
 
   private val tabs = Seq(
     "Orders" -> "/orders",
+    "Scheduled" -> "/scheduled",
     "Upload CSV" -> "/ingest/csv",
     "Test webhook" -> "/ingest/webhook",
-    "Test polling API" -> "/ingest/poll"
+    "Poll API" -> "/ingest/poll",
+    "Send orders" -> "/sendOrders"
   )
 
   private def page(pageName: String)(content: Frag*) = doctype("html")(html(
@@ -45,6 +48,21 @@ object Templates {
   def order(history: Seq[Order]): String = page("Orders")(
     h1(cls:="wrap", s"Order ID: ${history.last.id}"),
     table(
+      thead(tr(th("Updated"), th("Name"), th("Items"), th("Notes"), th("Scheduled"), th("Dispatched"), th("Other"))),
+      tbody(for (order <- history) yield tr(
+        td(dateTimeFormatter.format(order.updated)),
+        td(s"${order.firstName} ${order.lastName}"),
+        td(order.items),
+        td(order.notes),
+        td(dateTimeFormatter.format(order.scheduled)),
+        td(if (order.dispatched) "✓" else "✗"),
+        td(order.meta.map{case (k, v) => StringFrag(s"$k: $v")}.toSeq.join(br()))
+      ))
+    )
+  )
+
+  def scheduled(history: Seq[Order]): String = page("Scheduled")(
+    table(
       thead(tr(th("Name"), th("Items"), th("Notes"), th("Scheduled"), th("Dispatched"), th("Other"))),
       tbody(for (order <- history) yield tr(
         td(s"${order.firstName} ${order.lastName}"),
@@ -77,7 +95,7 @@ object Templates {
     table(id:="messages")
   )
 
-  def testPoll(): String = page("Test poll")(
+  def pollAPI(): String = page("Poll API")(
     button("Poll", onclick:="""
       $.post("/ingest/poll", "", ids => {
         if (ids.length > 0) {
@@ -91,5 +109,10 @@ object Templates {
       })
     """),
     table(id:="messages")
+  )
+
+  def sendOrders(orders: Seq[RobotOrder]) = page("Send Orders")(
+    h3("Sent orders to robot:"),
+    pre(orders.map(o => Json.stringify(Json.toJson(o))).mkString("[\n    ", ",\n    ", "\n]"))
   )
 }

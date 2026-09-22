@@ -18,6 +18,7 @@ class Endpoints() {
 
     case ("GET", "/orders", _) => Response(Templates.orders(Database.getOrders()))
     case ("GET", s"/order/$id", _) => Database.getOrder(id).map(history => Response(Templates.order(history))).getOrElse(Response.NotFound())
+    case ("GET", "/scheduled", _) => Response(Templates.scheduled(Database.getScheduledOrders()))
 
     case ("GET", "/ingest/csv", _) => Response(Templates.uploadCSV())
     case ("POST", "/ingest/csv", r) =>
@@ -39,7 +40,7 @@ class Endpoints() {
         .map(Database.saveOrder)
         .fold(err => Response.BadRequest(err.toString), Response.apply)
     
-    case ("GET", "/ingest/poll", _) => Response(Templates.testPoll())
+    case ("GET", "/ingest/poll", _) => Response(Templates.pollAPI())
     case ("POST", "/ingest/poll", _) =>
       val apiResponse = Try(Json.parse(APIStub.get(lastPoll)).as[APIResponse])
       val orders = apiResponse match {
@@ -51,5 +52,12 @@ class Endpoints() {
 
       val ids = orders.map(Database.saveOrder)
       Response.json(ids)
+    
+    case ("GET", "/sendOrders", _) =>
+      val orders = Database.getScheduledOrders().map(_.copy(updated = LocalDateTime.now(), dispatched = true))
+      if (orders.nonEmpty) {
+        orders.foreach(Database.saveOrder) // Update orders in the database
+      }
+      Response(Templates.sendOrders(orders.map(RobotOrder.fromOrder)))
   }
 }
