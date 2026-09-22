@@ -24,7 +24,6 @@ set of notional test data exemplifying different possible order sources and scen
     * Polling API Call (`api.jsonl`)
         * Calling an external API to request recent orders using a `time_since` query parameter.
         * The API will return deltas since last `time_since`, allow for scheduled orders. The API may return new orders, updates, and cancellations since the supplied `time_since` value.
-
         * Each line of sample data represents one api response received from this style of API.
     * CSV (`orders_1.csv` / `orders_2.csv` / `orders_3.csv` / `orders_4.csv`)
         * CSVs of orders can be expected to be uploaded multiple times per day.

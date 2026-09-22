@@ -59,5 +59,8 @@ class Endpoints() {
         orders.foreach(Database.saveOrder) // Update orders in the database
       }
       Response(Templates.sendOrders(orders.map(RobotOrder.fromOrder)))
+    
+    case ("GET", "/api/orders", _) => Response(Json.stringify(Json.toJson(Database.getOrders())), Map("Content-Type" -> Seq("application/json")))
+    case ("GET", s"/api/order/$id", _) => Response(Json.stringify(Json.toJson(Database.getOrder(id))), Map("Content-Type" -> Seq("application/json")))
   }
 }
