@@ -9,6 +9,7 @@ object Database {
   given Connector = {
     if (Files.notExists(Paths.get("database.db"))) {
       given Connector("jdbc:sqlite:database.db")
+      println("Database not found, initializing")
       val schema = Source.fromResource("schema.sql").getLines().mkString("\n")
       schema.sql.execute()
       summon[Connector]
