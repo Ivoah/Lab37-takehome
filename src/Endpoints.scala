@@ -9,7 +9,10 @@ import scala.util.Try
 import java.time.LocalDateTime
 import scala.util.Success
 
+// Class that contains the router object that gets passed to the server.
+// All routes are defined here.
 class Endpoints() {
+  // Keep track of the last time we polled the external API
   private var lastPoll = LocalDateTime.MIN
 
   def router: Router = Router {
@@ -45,6 +48,8 @@ class Endpoints() {
       val apiResponse = Try(Json.parse(APIStub.get(lastPoll)).as[APIResponse])
       val orders = apiResponse match {
         case Success(APIResponse(200, Some(apiOrders), None)) =>
+          // Only update lastPoll on a successful API response.
+          // If the API returns a failure we don't want to miss out on orders.
           lastPoll = LocalDateTime.now()
           apiOrders.map(Order.fromExternalAPI.tupled)
         case _ => Seq()
@@ -55,9 +60,10 @@ class Endpoints() {
     
     case ("GET", "/sendOrders", _) =>
       val orders = Database.getScheduledOrders().map(_.copy(updated = LocalDateTime.now(), dispatched = true))
-      if (orders.nonEmpty) {
-        orders.foreach(Database.saveOrder) // Update orders in the database
-      }
+
+      // Update orders in the database showing they've been dispatched.
+      orders.foreach(Database.saveOrder)
+      // In a real system we would send the orders to the robot here, instead just return a page showing what we would've sent.
       Response(Templates.sendOrders(orders.map(RobotOrder.fromOrder)))
     
     case ("GET", "/api/orders", _) => Response(Json.stringify(Json.toJson(Database.getOrders())), Map("Content-Type" -> Seq("application/json")))

@@ -1,6 +1,8 @@
 import org.rogach.scallop.*
 import net.ivoah.vial.*
 
+// Main entry point of the program.
+// Parses command line arguments and starts the web server.
 @main
 def main(args: String*): Unit = {
   class Conf(args: Seq[String]) extends ScallopConf(args) {
